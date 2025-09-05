@@ -1,12 +1,19 @@
 // src/components/Footer.tsx
 import React from 'react';
-import { Home } from 'lucide-react';
+import { Home,Sparkles, Github, Twitter, Linkedin, Mail } from 'lucide-react';
+
 
 interface FooterProps {
   onNavigate: (sectionId: string) => void;
 }
 
 const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
+  const socialLinks = [
+    { icon: Twitter, href: '#', label: 'Twitter' },
+    { icon: Github, href: '#', label: 'GitHub' },
+    { icon: Linkedin, href: '#', label: 'LinkedIn' },
+    { icon: Mail, href: '#', label: 'Email' }
+  ];
   return (
     <footer className="bg-gray-900 text-white py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -21,6 +28,18 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <p className="text-gray-400 mb-4 font-logo">
               Revolutionizing architectural design with AI-powered tools <br/> for professionals worldwide.
             </p>
+            <div className="flex space-x-4">
+              {socialLinks.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-600 transition-all duration-300"
+                  aria-label={social.label}
+                >
+                  <social.icon className="w-5 h-5" />
+                </a>
+              ))}
+            </div>
           </div>
           <div>
             <h4 className="text-lg font-semibold mb-4 font-logo">Product</h4>
