@@ -7,7 +7,6 @@ interface NavbarProps {
   setIsMobileMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
   handleHomeClick: (e: React.MouseEvent<HTMLAnchorElement>) => void;
   handleGenerateClick: (e: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>) => void;
-  handleVRWalkthroughClick: (e: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>) => void;
   handleSignIn: () => void;
   handleGetStarted: () => void;
 }
@@ -17,7 +16,6 @@ const Navbar: React.FC<NavbarProps> = ({
   setIsMobileMenuOpen,
   handleHomeClick,
   handleGenerateClick,
-  handleVRWalkthroughClick,
   handleSignIn,
   handleGetStarted,
 }) => {
@@ -37,7 +35,6 @@ const Navbar: React.FC<NavbarProps> = ({
             <a href="#home" onClick={handleHomeClick} className="text-gray-600 hover:text-blue-600 px-3 py-2 text-md font-medium transition-colors">Home</a>
             <a href="#Features" className="text-gray-600 hover:text-blue-600 px-3 py-2 text-md font-medium transition-colors">Features</a>
             <a href="#" onClick={handleGenerateClick} className="text-gray-600 hover:text-blue-600 px-3 py-2 text-md font-medium transition-colors">Generate</a>
-            <a href="#" onClick={handleVRWalkthroughClick}  className="text-gray-600 hover:text-blue-600 px-3 py-2 text-md font-medium transition-colors">VR Walkthrough</a>
             <a href="#Gallery" className="text-gray-600 hover:text-blue-600 px-3 py-2 text-md font-medium transition-colors">Gallery</a>
             <a href="#Pricing" className="text-gray-600 hover:text-blue-600 px-3 py-2 text-md font-medium transition-colors">Pricing</a>
             <div className="flex space-x-4">
@@ -75,7 +72,6 @@ const Navbar: React.FC<NavbarProps> = ({
           <a href="#home" onClick={handleHomeClick} className="text-gray-700 hover:bg-gray-50 hover:text-blue-500 block px-3 py-2 rounded-md text-base font-medium transition-colors">Home</a>
           <a href="#Features" onClick={() => setIsMobileMenuOpen(false)} className="text-gray-700 hover:bg-gray-50 hover:text-blue-500 block px-3 py-2 rounded-md text-base font-medium transition-colors">Features</a>
           <a href="#" onClick={handleGenerateClick} className="text-gray-700 hover:bg-gray-50 hover:text-blue-500 block px-3 py-2 rounded-md text-base font-medium transition-colors">Generate</a>
-          <a href="#" onClick={handleVRWalkthroughClick} className="text-gray-700 hover:bg-gray-50 hover:text-blue-500 block px-3 py-2 rounded-md text-base font-medium transition-colors">VR Walkthrough</a>
           <a href="#Gallery" onClick={() => setIsMobileMenuOpen(false)} className="text-gray-700 hover:bg-gray-50 hover:text-blue-500 block px-3 py-2 rounded-md text-base font-medium transition-colors">Gallery</a>
           <a href="#Pricing" onClick={() => setIsMobileMenuOpen(false)} className="text-gray-700 hover:bg-gray-50 hover:text-blue-500 block px-3 py-2 rounded-md text-base font-medium transition-colors">Pricing</a>
           <button onClick={handleSignIn} className="text-gray-700 hover:bg-gray-50 hover:text-blue-500 w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors">

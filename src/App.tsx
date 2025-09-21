@@ -3,15 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { Upload, Zap, RotateCcw, Box, Sun, Palette, Settings, Download, ArrowRight, Check, Star, Users, Award, Menu, X, Home, Layers, Ruler, FileText, Cpu, ArrowLeft } from 'lucide-react';
 import { useAuth } from './hooks/useAuth';
 import { AuthModal } from './components/AuthModal';
-import { Dashboard } from './components/Dashboard';
+import  Dashboard  from './components/Dashboard';
 import Generate from './components/Generate';
-import VRWalkthrough from './components/VRWalkthrough';
 
 // Import the TSX components for the main page
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Features from './components/Features';
-import AdvancedFeatures from './components/AdvancedFeatures';
 import Pricing from './components/Pricing';
 import SocialProof from './components/SocialProof';
 import CTA from './components/CTA';
@@ -20,7 +18,7 @@ import Gallery from './components/Gallery';
 
 function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [currentView, setCurrentView] = useState<'home' | 'generate' | 'vrWalkthrough' | 'content'>('home');
+  const [currentView, setCurrentView] = useState<'home' | 'generate' | 'content'>('home');
   const [targetSectionId, setTargetSectionId] = useState<string | null>(null);
   const { user, loading } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -47,12 +45,6 @@ function App() {
     setCurrentView('home');
   };
   
-    const handleVRWalkthroughClick = () => {
-    setCurrentView('vrWalkthrough');
-  };
-
-
-
   const handleGetStarted = () => {
     if (user) {
       handleGenerateClick();
@@ -519,44 +511,17 @@ function App() {
 
     };
 
-    const homeSections = ['features', 'pricing', 'gallery', 'advanced-features', 'vrWalkthrough'];
+    const homeSections = ['features', 'pricing', 'gallery'];
     if (homeSections.includes(sectionId)) {
-      if (sectionId === 'vrWalkthrough') {
-        setCurrentView('vrWalkthrough');
-      } else {
-        setCurrentView('home');
-        setTargetSectionId(sectionId);
-      }
-    } else if (sectionMap[sectionId]) {
+      setCurrentView('home');
+      setTargetSectionId(sectionId);
+    }
+    else if (sectionMap[sectionId]) {
       setContentPageData(sectionMap[sectionId]);
       setCurrentView('content');
     }
-  };
-
-
-
-  const advancedFeatures = [
-    {
-      icon: RotateCcw,
-      title: "360° Views",
-      description: "Immersive panoramic visualization of every space.",
-    },
-    {
-      icon: Box,
-      title: "VR Walkthrough",
-      description: "Virtual reality experience for client presentations.",
-    },
-    {
-      icon: Sun,
-      title: "Lighting Analysis",
-      description: "Real-time natural and artificial lighting simulation.",
-    },
-    {
-      icon: Palette,
-      title: "Material Preview",
-      description: "Interactive material and color selection tools.",
-    },
-  ];
+    setIsMobileMenuOpen(false);
+  }
 
   const features = [
     {
@@ -634,8 +599,7 @@ function App() {
         handleGenerateClick={handleGenerateClick}
         handleSignIn={handleSignIn}
         handleGetStarted={handleGetStarted}
-        handleVRWalkthroughClick={handleVRWalkthroughClick}
-      />
+        />
 
       <main className="flex-1 w-full h-full p-0 m-0">
         {currentView === 'generate' ? (
@@ -645,32 +609,17 @@ function App() {
             onGalleryClick={() => handleNavigate('gallery')}
 
           />
-        ) : currentView === 'vrWalkthrough' ? (
-          <VRWalkthrough onReturnToHome={handleHomeClick} />
-        )  : currentView === 'content' ? (
+        ) : currentView === 'content' ? (
           <ContentPage />
         ) : (
           <>
             <Hero handleGenerateClick={handleGenerateClick} />
-            <div id="features">
-              <Features features={features} />
-            </div>
-            <div id="advanced-features">
-              <AdvancedFeatures advancedFeatures={advancedFeatures} />
-            </div>
-            {/* Added a button for the VR Walkthrough page */}
-            <div className="text-center py-8">
-              <button
-                onClick={handleVRWalkthroughClick}
-                className="px-8 py-4 bg-purple-600 text-white font-bold text-lg rounded-md shadow-lg hover:bg-purple-700 transition transform hover:scale-105"
-              >
-                Launch VR Walkthrough
-              </button>
-            </div>
             <section id="gallery">
               <Gallery />
             </section>
-
+            <div id="features">
+              <Features features={features} />
+            </div>
             <div id="pricing">
               <Pricing handleGetStarted={handleGetStarted} />
             </div>
