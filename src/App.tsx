@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Upload, Zap, RotateCcw, Box, Sun, Palette, Settings, Download, ArrowRight, Check, Star, Users, Award, Menu, X, Home, Layers, Ruler, FileText, Cpu, ArrowLeft } from 'lucide-react';
 import { useAuth } from './hooks/useAuth';
 import { AuthModal } from './components/AuthModal';
-import  Dashboard  from './components/Dashboard';
+import { Dashboard } from './components/Dashboard';
 import Generate from './components/Generate';
 
 // Import the TSX components for the main page
