@@ -1,4 +1,3 @@
-// src/components/CTA.tsx
 import React from 'react';
 
 interface CTAProps {

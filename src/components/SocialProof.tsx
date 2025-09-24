@@ -1,4 +1,3 @@
-// src/components/SocialProof.tsx
 import React from 'react';
 import { Users, Award, Star } from 'lucide-react';
 

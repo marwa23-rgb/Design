@@ -1,4 +1,3 @@
-import React from 'react'
 import { useAuth } from '../hooks/useAuth'
 import { createCheckoutSession } from '../lib/stripe'
 import { SubscriptionPlan } from '../lib/supabase'
@@ -40,8 +39,10 @@ const stripePriceIds = {
   premium: 'price_premium_monthly', // Replace with your actual Stripe price ID
   enterprise: 'price_enterprise_monthly' // Replace with your actual Stripe price ID
 }
-
-export function Pricing() {
+interface PricingProps {
+  handleGetStarted: () => void;
+}
+export function Pricing({handleGetStarted}: PricingProps) {
   const { user, profile, signIn } = useAuth()
 
   const handleSubscribe = async (plan: SubscriptionPlan) => {
@@ -142,9 +143,9 @@ export function Pricing() {
                   ) : (
                     <button
                       className="w-full py-3 px-4 rounded-lg font-medium text-white bg-blue-600 hover:bg-blue-700 transition"
-                      onClick={signIn}
+                      onClick={() => signIn('','')}
                     >
-                      Sign In to Subscribe
+                      Subscribe
                     </button>
                   )}
                 </div>

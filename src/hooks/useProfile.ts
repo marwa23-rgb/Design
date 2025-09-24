@@ -1,5 +1,12 @@
 import { useState, useEffect } from 'react';
-import { supabase, Profile } from '../lib/supabase';
+import { supabase } from '../lib/supabase';
+
+// Define the Profile type here if not exported elsewhere
+export type Profile = {
+  id: string;
+  subscription_tier: 'starter' | 'professional' | 'enterprise';
+  // Add other fields as needed
+};
 import { useAuth } from './useAuth';
 
 export function useProfile() {

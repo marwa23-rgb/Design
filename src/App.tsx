@@ -1,6 +1,6 @@
 // src/App.tsx
 import React, { useState, useEffect } from 'react';
-import { Upload, Zap, RotateCcw, Box, Sun, Palette, Settings, Download, ArrowRight, Check, Star, Users, Award, Menu, X, Home, Layers, Ruler, FileText, Cpu, ArrowLeft } from 'lucide-react';
+import { Upload, Zap,  Settings, Download,  Layers, Ruler,  Cpu} from 'lucide-react';
 import { useAuth } from './hooks/useAuth';
 import { AuthModal } from './components/AuthModal';
 import { Dashboard } from './components/Dashboard';
@@ -604,10 +604,7 @@ function App() {
       <main className="flex-1 w-full h-full p-0 m-0">
         {currentView === 'generate' ? (
           <Generate
-            onFeaturesClick={() => handleNavigate('features')}
-            onPricingClick={() => handleNavigate('pricing')}
-            onGalleryClick={() => handleNavigate('gallery')}
-
+            onNavigate={handleNavigate}
           />
         ) : currentView === 'content' ? (
           <ContentPage />

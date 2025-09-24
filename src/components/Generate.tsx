@@ -7,8 +7,6 @@ interface GeneratedDesign {
     description: string;
     image: string;
 }
-
-// Define the types for the form state
 type BuildingType = 'Single Family Home' | 'Townhouse' | 'Apartment Complex' | 'Commercial Building' | null;
 type ArchitecturalStyle = 'Modern' | 'Traditional' | 'Contemporary' | 'Minimalist' | null;
 type SustainabilityLevel = 'Basic' | 'Standard efficiency' | 'Green' | 'Energy efficient' | 'LEED' | 'Certified sustainable' | null;
@@ -25,11 +23,16 @@ interface RoomConfiguration {
     garage: number;
 }
 
+// Props interface to accept onNavigate
+interface GenerateProps {
+    onNavigate?: (sectionId: string) => void;
+}
+
 // Define the shape of the component's view states
 type InputView = 'specifications' | 'upload';
 type ProjectType = 'Residential' | 'Commercial' | null;
 
-const ArchitecturalDesignTool = () => {
+const Generate: React.FC<GenerateProps> = ({ onNavigate }) => {
     // State for the main view
     const [isGenerating, setIsGenerating] = useState<boolean>(false);
     const [generatedDesign, setGeneratedDesign] = useState<GeneratedDesign | null>(null);
@@ -467,8 +470,7 @@ const ArchitecturalDesignTool = () => {
                     </div>
                 </div>
 
-                {/* --------------------------- Right Panel: Output Section --------------------------- */}
-                <div 
+                 <div 
                     className={`lg:w-1/2 p-6 bg-white rounded-2xl shadow-xl border border-gray-200 text-center flex flex-col justify-center items-center 
                         ${generatedDesign ? 'h-auto' : 'h-[32rem]'}` /* Dynamic height classes */}
                 >
@@ -496,4 +498,4 @@ const ArchitecturalDesignTool = () => {
     );
 };
 
-export default ArchitecturalDesignTool;
+export default Generate;

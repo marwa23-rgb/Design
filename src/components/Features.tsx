@@ -1,47 +1,18 @@
 import React from 'react';
-import { LucideIcon, Layers, Ruler, Home, Wand, Palette, FileText, Square } from 'lucide-react';
+import { LucideIcon} from 'lucide-react';
+type Feature = {
+  icon: LucideIcon;
+  title: string;
+  description: string;
+};
 
-interface FeatureItem {
-    icon: LucideIcon;
-    title: string;
-    description: string;
+interface FeaturesProps {
+  features: Feature[];
 }
 
-const features: FeatureItem[] = [
-    {
-        icon: Home,
-        title: 'Interior & Exterior Design',
-        description: 'Effortlessly reimagine interior and exterior spaces with a diverse range of styles and aesthetics, bringing your vision to life.'
-    },
-    {
-        icon: Wand,
-        title: 'Sketch to Image',
-        description: 'Transform your hand-drawn sketches or CAD plans into stunning, fully rendered architectural visualizations.'
-    },
-    {
-        icon: Palette,
-        title: 'Plan to Plot',
-        description: "Enter your plot's dimensions and let our AI generate the optimal 2D floor plan layout for your space."
-    },
-    {
-        icon: Ruler,
-        title: '2D Floor Plan to 3D',
-        description: 'Convert two-dimensional floor plans into breathtakingly detailed and realistic 3D models.'
-    },
-    {
-        icon: Layers,
-        title: 'Masterplan & Landscape',
-        description: 'Visualize masterplans and landscape designs in seconds, powered by advanced artificial intelligence.'
-    },
-    {
-        icon: FileText,
-        title: 'Text to Render',
-        description: 'Generate intricate architectural and interior designs by simply describing your vision with text prompts.'
-    }
 
-];
 
-const Features: React.FC = () => {
+const Features: React.FC<FeaturesProps> = ({ features }) => {
     return (
         <section id='Features' className="py-20 lg:py-32 bg-gradient-to-b from-gray-50 via-gray-100/20 to-gray-50 font-sans">
             <style>{`

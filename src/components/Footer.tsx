@@ -1,6 +1,6 @@
 // src/components/Footer.tsx
 import React from 'react';
-import { Home,Sparkles, Github, Twitter, Linkedin, Mail } from 'lucide-react';
+import { Home, Github, Twitter, Linkedin, Mail } from 'lucide-react';
 
 
 interface FooterProps {

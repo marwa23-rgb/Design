@@ -1,44 +1,54 @@
 import { supabase } from '../../lib/supabase'
 
 export async function POST({ request }: { request: Request }) {
-  const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
-  const signature = request.headers.get('stripe-signature')
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
+  const stripeModule = await import('stripe');
+  const stripe = new stripeModule.default(process.env['STRIPE_SECRET_KEY'] as string);
+  const signature = request.headers.get('stripe-signature');
+  const webhookSecret = process.env['STRIPE_WEBHOOK_SECRET'];
 
-  let event
+  if (!signature) {
+    console.error('Missing stripe-signature header');
+    return new Response(null, { status: 400 });
+  }
+
+  if (!webhookSecret) {
+    console.error('Missing STRIPE_WEBHOOK_SECRET environment variable');
+    return new Response(null, { status: 500 });
+  }
+  let event;
 
   try {
-    const body = await request.text()
-    event = stripe.webhooks.constructEvent(body, signature, webhookSecret)
+    const body = await request.text();
+    event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
   } catch (err) {
-    console.error('Webhook signature verification failed:', err)
-    return new Response(null, { status: 400 })
+    console.error('Webhook signature verification failed:', err);
+    return new Response(null, { status: 400 });
   }
 
   try {
     switch (event.type) {
       case 'checkout.session.completed':
-        const session = event.data.object
-        await handleCheckoutSessionCompleted(session)
-        break
-        
+        const session = event.data.object;
+        await handleCheckoutSessionCompleted(session);
+        break;
       case 'customer.subscription.updated':
-        const subscription = event.data.object
-        await handleSubscriptionUpdated(subscription)
-        break
-        
+        const subscription = event.data.object;
+        await handleSubscriptionUpdated(subscription);
+        break;
       case 'customer.subscription.deleted':
-        const deletedSubscription = event.data.object
-        await handleSubscriptionDeleted(deletedSubscription)
-        break
+        const deletedSubscription = event.data.object;
+        await handleSubscriptionDeleted(deletedSubscription);
+        break;
     }
 
-    return new Response(null, { status: 200 })
+    return new Response(null, { status: 200 });
   } catch (error) {
-    console.error('Webhook handler error:', error)
-    return new Response(null, { status: 500 })
+    console.error('Webhook handler error:', error);
+    return new Response(null, { status: 500 });
   }
 }
+
+// ...rest of file unchanged...
 
 async function handleCheckoutSessionCompleted(session: any) {
   const userId = session.metadata.userId

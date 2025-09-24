@@ -1,5 +1,15 @@
 import { useState, useEffect } from 'react';
-import { supabase, Project } from '../lib/supabase';
+import { supabase } from '../lib/supabase';
+
+// Define the Project type here or import from the correct module
+export type Project = {
+  id: string;
+  user_id: string;
+  name: string;
+  description?: string;
+  updated_at?: string;
+  // Add other fields as needed
+};
 import { useAuth } from './useAuth';
 
 export function useProjects() {

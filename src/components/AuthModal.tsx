@@ -17,7 +17,7 @@ export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModal
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
 
-  const { signIn, signUp, signInWithGoogle, signInWithGitHub, resetPassword } = useAuth();
+  const { signIn, signUp, resetPassword } = useAuth();
 
   useEffect(() => {
     setMode(initialMode);
@@ -38,31 +38,30 @@ export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModal
 
     try {
       if (mode === 'forgot') {
-        const { error } = await resetPassword(email);
-        if (error) throw error;
+        await resetPassword(email);
         setMessage('A password reset link has been sent to your email.');
       } else if (mode === 'signup') {
-        const { error } = await signUp(email, password, fullName);
-        if (error) throw error;
+        const result = await signUp(email, password, fullName);
+        if (!result.user) {
+          throw new Error('Sign up failed. Please try again.');
+        }
         setMessage('A confirmation link has been sent to your email. Please check your inbox.');
       } else {
-        const { error } = await signIn(email, password);
-        if (error) throw error;
+        const result = await signIn(email, password);
+        if (!result.user || !result.session) {
+          throw new Error('Sign in failed. Please check your credentials and try again.');
+        }
         onClose();
       }
     } catch (err: any) {
-      // Parse Supabase error messages for better user experience
       let errorMessage = 'An error occurred. Please try again.';
-      
       if (err.message) {
         try {
-          // Try to parse if it's a JSON string
           const parsed = JSON.parse(err.message);
           if (parsed.message) {
             errorMessage = parsed.message;
           }
         } catch {
-          // If not JSON, check for common error patterns
           if (err.message.includes('Invalid login credentials')) {
             errorMessage = 'Incorrect email or password. Please check your details and try again.';
           } else if (err.message.includes('User already registered')) {
@@ -78,7 +77,6 @@ export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModal
           }
         }
       }
-      
       setError(errorMessage);
     } finally {
       setLoading(false);
@@ -88,19 +86,8 @@ export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModal
   const handleSocialLogin = async (provider: 'google' | 'github') => {
     setLoading(true);
     setError('');
-    
-    try {
-      if (provider === 'google') {
-        await signInWithGoogle();
-      } else {
-        await signInWithGitHub();
-      }
-      // The redirect will handle closing the modal
-    } catch (err: any) {
-      setError('Login failed. Please try again.');
-    } finally {
-      setLoading(false);
-    }
+    setError(`Social login with ${provider} is not implemented.`);
+    setLoading(false);
   };
 
   return (

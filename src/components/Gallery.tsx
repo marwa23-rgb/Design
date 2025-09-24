@@ -1,5 +1,4 @@
-import React from 'react';
-import { ArrowRight, Layers, Image, Plus, PenTool } from 'lucide-react';
+import { ArrowRight} from 'lucide-react';
 
 import video2 from '../pages/ai-scenario-changer.mp4';
 import video3 from '../pages/exterior_renovator.mp4';
@@ -8,7 +7,6 @@ import video6 from '../pages/texturelock-rendering.mp4';
 import video8 from '../pages/sketch.mp4';
 
 const Gallery = () => {
-    // Replaced local video imports with public URLs to ensure the application runs correctly.
     const designs = [
         {
             title: "Interior Design",

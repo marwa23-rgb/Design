@@ -1,7 +1,6 @@
 const Hero = ({ handleGenerateClick }: { handleGenerateClick: any }) => {
   return (
     <div className="relative z-10 flex flex-col items-start justify-center min-h-[80vh] px-12 text-white">
-      {/* Background فقط للـ Hero */}
       <div
         className="absolute inset-0 h-[520px] bg-cover bg-center -z-10"
         style={{
