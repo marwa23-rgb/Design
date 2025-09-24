@@ -10,7 +10,7 @@ import Generate from './components/Generate';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Features from './components/Features';
-import Pricing from './components/Pricing';
+import { Pricing } from './components/Pricing';
 import SocialProof from './components/SocialProof';
 import CTA from './components/CTA';
 import Footer from './components/Footer';
