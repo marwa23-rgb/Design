@@ -1,12 +1,10 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { supabase, UserProfile } from '../lib/supabase';
 
 export const useAuth = () => {
   const [user, setUser] = useState<any>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     // Get initial session
@@ -31,80 +29,123 @@ export const useAuth = () => {
     });
 
     return () => subscription.unsubscribe();
-  }, [navigate]);
+  }, []); // إزالة navigate من dependencies
 
   const fetchUserProfile = async (userId: string) => {
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', userId)
-      .single();
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
 
-    if (!error) setProfile(data);
-    else setProfile(null);
+      if (!error) setProfile(data);
+      else setProfile(null);
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+      setProfile(null);
+    }
   };
 
   const createUserProfile = async (userId: string) => {
-    const { data: { user } } = await supabase.auth.getUser();
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
 
-    const { data, error } = await supabase
-      .from('profiles')
-      .insert([
-        {
-          id: userId,
-          email: user?.email ?? '',
-          full_name: user?.user_metadata?.full_name ?? '',
-          avatar_url: user?.user_metadata?.avatar_url ?? null,
-          subscription_plan: 'free',
-          subscription_status: 'active',
-          stripe_customer_id: null,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        }
-      ])
-      .select()
-      .single();
+      const { data, error } = await supabase
+        .from('profiles')
+        .insert([
+          {
+            id: userId,
+            email: user?.email ?? '',
+            full_name: user?.user_metadata?.full_name ?? '',
+            avatar_url: user?.user_metadata?.avatar_url ?? null,
+            subscription_plan: 'free',
+            subscription_status: 'active',
+            stripe_customer_id: null,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          }
+        ])
+        .select()
+        .single();
 
-    if (error) {
+      if (error) {
+        console.error('Error creating profile:', error);
+      } else {
+        setProfile(data);
+      }
+    } catch (error) {
       console.error('Error creating profile:', error);
-    } else {
-      setProfile(data);
     }
   };
 
   const signUp = async (email: string, password: string, fullName: string) => {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { full_name: fullName }
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { full_name: fullName }
+        }
+      });
+      
+      if (data.user) {
+        await createUserProfile(data.user.id);
       }
-    });
-    if (data.user) {
-      await createUserProfile(data.user.id);
+      
+      return { user: data.user, session: data.session, error };
+    } catch (error) {
+      console.error('Error signing up:', error);
+      return { user: null, session: null, error };
     }
-    return { user: data.user, session: data.session, error };
   };
 
   const signIn = async (email: string, password: string) => {
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    if (data.user) {
-      await fetchUserProfile(data.user.id);
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({ 
+        email, 
+        password 
+      });
+      
+      if (data.user) {
+        await fetchUserProfile(data.user.id);
+      }
+      
+      return { user: data.user, session: data.session, error };
+    } catch (error) {
+      console.error('Error signing in:', error);
+      return { user: null, session: null, error };
     }
-    return { user: data.user, session: data.session, error };
   };
 
   const signOut = async () => {
-    await supabase.auth.signOut();
-    setUser(null);
-    setProfile(null);
-    navigate('/');
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error('Error signing out:', error);
+        return false;
+      }
+      
+      setUser(null);
+      setProfile(null);
+      return true;
+    } catch (error) {
+      console.error('Error signing out:', error);
+      return false;
+    }
   };
 
   const resetPassword = async (email: string) => {
-    const { error } = await supabase.auth.resetPasswordForEmail(email);
-    if (error) throw error;
-    return true;
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`
+      });
+      if (error) throw error;
+      return true;
+    } catch (error) {
+      console.error('Error resetting password:', error);
+      throw error;
+    }
   };
 
   return {

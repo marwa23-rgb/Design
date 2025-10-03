@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Mail, Lock, User, Chrome, Github } from 'lucide-react';
+import { X, Mail, Lock, User, Chrome} from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 
 interface AuthModalProps {
@@ -83,7 +83,7 @@ export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModal
     }
   };
 
-  const handleSocialLogin = async (provider: 'google' | 'github') => {
+  const handleSocialLogin = async (provider: 'google') => {
     setLoading(true);
     setError('');
     setError(`Social login with ${provider} is not implemented.`);
@@ -219,15 +219,6 @@ export function AuthModal({ isOpen, onClose, initialMode = 'signin' }: AuthModal
                 <span className="text-gray-700">Continue with Google</span>
               </button>
               
-              <button
-                type="button"
-                onClick={() => handleSocialLogin('github')}
-                disabled={loading}
-                className="w-full flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                <Github className="h-5 w-5 text-gray-900 mr-3" />
-                <span className="text-gray-700">Continue with GitHub</span>
-              </button>
             </div>
           </>
         )}

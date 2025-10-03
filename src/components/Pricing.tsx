@@ -1,6 +1,7 @@
-import { useAuth } from '../hooks/useAuth'
-import { createCheckoutSession } from '../lib/stripe'
-import { SubscriptionPlan } from '../lib/supabase'
+import { Check } from 'lucide-react';
+import { useAuth } from '../hooks/useAuth';
+import { createCheckoutSession } from '../lib/stripe';
+import { SubscriptionPlan } from '../lib/supabase';
 
 const pricingPlans: SubscriptionPlan[] = [
   {
@@ -31,27 +32,30 @@ const pricingPlans: SubscriptionPlan[] = [
     features: ['Everything in Premium', 'Custom AI models', 'White-label solutions', 'SLA guarantee', 'Dedicated account manager', 'API access'],
     interval: 'month'
   }
-]
+];
 
 const stripePriceIds = {
   free: null,
   basic: 'price_basic_monthly', // Replace with your actual Stripe price ID
   premium: 'price_premium_monthly', // Replace with your actual Stripe price ID
   enterprise: 'price_enterprise_monthly' // Replace with your actual Stripe price ID
-}
+};
+
 interface PricingProps {
   handleGetStarted: () => void;
 }
-export function Pricing({handleGetStarted}: PricingProps) {
-  const { user, profile, signIn } = useAuth()
+
+export function Pricing({ handleGetStarted }: PricingProps) {
+  const { user, profile, signIn } = useAuth();
 
   const handleSubscribe = async (plan: SubscriptionPlan) => {
     if (!user) {
-      return
+      signIn('', ''); // Trigger sign-in if user is not authenticated
+      return;
     }
 
     if (plan.id === 'free') {
-      return
+      return;
     }
 
     try {
@@ -59,101 +63,92 @@ export function Pricing({handleGetStarted}: PricingProps) {
         stripePriceIds[plan.id as keyof typeof stripePriceIds]!,
         user.email!,
         user.id
-      )
+      );
     } catch (error) {
-      console.error('Error creating checkout session:', error)
-      alert('Failed to initiate payment. Please try again.')
+      console.error('Error creating checkout session:', error);
+      alert('Failed to initiate payment. Please try again.');
     }
-  }
+  };
 
   const getCurrentPlan = () => {
-    return profile?.subscription_plan || 'free'
-  }
+    return profile?.subscription_plan || 'free';
+  };
 
   return (
-    <section className="py-20 bg-gray-50">
-      <div className="container mx-auto px-4">
+    <section id="Pricing" className="py-20 bg-gray-50 font-sans" dir="auto">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4">Choose Your Plan</h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Select the perfect plan for your architectural design needs. Start with a free plan and upgrade anytime.
-          </p>
+          <h2 className="text-3xl font-bold font-logo text-blue-700 mb-4">Choose Your Plan</h2>
+          <p className="text-lg text-gray-600 font-logo">Select the perfect plan for your architectural design needs</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {/* Pricing Grid */}
+        <div className="grid md:grid-cols-4 gap-8">
           {pricingPlans.map((plan) => {
-            const isCurrentPlan = getCurrentPlan() === plan.id
-            const isFreePlan = plan.id === 'free'
+            const isCurrentPlan = getCurrentPlan() === plan.id;
+            const isFreePlan = plan.id === 'free';
+            const isPopularPlan = plan.id === 'premium'; 
 
             return (
               <div
                 key={plan.id}
-                className={`relative overflow-hidden rounded-2xl shadow-lg bg-white p-6 flex flex-col justify-between ${
-                  isCurrentPlan ? 'ring-2 ring-blue-500 border border-blue-500' : 'border border-gray-200'
+                className={`bg-white rounded-xl p-8 shadow-sm hover:shadow-md transition-shadow relative ${
+                  isPopularPlan ? 'border-2 border-blue-500' : 'hover:border-2 hover:border-blue-500'
                 }`}
               >
-                {isCurrentPlan && (
-                  <div className="absolute top-4 right-4">
-                    <span className="px-3 py-1 bg-blue-600 text-white text-sm font-medium rounded-full">
-                      Current Plan
-                    </span>
-                  </div>
-                )}
+                {/* Most Popular Badge Only */}
+                {isPopularPlan && ( 
+                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                    <span className="bg-blue-500 text-white px-3 py-2 rounded-full text-md font-medium font-logo">
+                      Most Popular 
+                    </span>
+                  </div>
+                )}
 
-                <div>
-                  <h3 className="text-2xl font-semibold mb-2">{plan.name}</h3>
-                  <p className="text-gray-600 mb-4">
+                {/* Plan Details */}
+                <div className="text-center mb-6">
+                  <h3 className="text-2xl font-semibold text-blue-700 mb-2 font-logo">{plan.name}</h3>
+                  <p className="text-gray-600 font-logo mb-4">
                     {plan.id !== 'free' ? 'Perfect for ' : 'Great for '}
                     {plan.id === 'free' && 'getting started'}
                     {plan.id === 'basic' && 'individual architects'}
                     {plan.id === 'premium' && 'design studios'}
                     {plan.id === 'enterprise' && 'large firms'}
                   </p>
-
-                  <div className="mb-6">
-                    <span className="text-4xl font-bold">${plan.price}</span>
-                    <span className="text-gray-500">/{plan.interval}</span>
+                  <div className="text-4xl font-bold font-logo text-gray-900 mb-1">
+                    ${plan.price}<span className="text-lg font-medium text-gray-600">/{plan.interval}</span>
                   </div>
-
-                  <ul className="space-y-3 mb-6">
-                    {plan.features.map((feature, index) => (
-                      <li key={index} className="flex items-center">
-                        <svg className="w-5 h-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  <p className="text-gray-500 text-sm">billed monthly</p>
                 </div>
 
+                {/* Features List */}
+                <ul className="space-y-3 mb-8">
+                  {plan.features.map((feature, index) => (
+                    <li key={index} className="flex items-center">
+                      <Check className="h-5 w-5 text-green-500 mr-3 font-logo" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Action Button */}
                 <div>
-                  {user ? (
-                    <button
-                      className={`w-full py-3 px-4 rounded-lg font-medium text-white transition ${
-                        isCurrentPlan
-                          ? 'bg-gray-400 cursor-not-allowed'
-                          : 'bg-blue-600 hover:bg-blue-700'
-                      }`}
-                      onClick={() => handleSubscribe(plan)}
-                      disabled={isCurrentPlan}
-                    >
-                      {isCurrentPlan ? 'Current Plan' : isFreePlan ? 'Select Free' : `Subscribe for $${plan.price}`}
-                    </button>
-                  ) : (
-                    <button
-                      className="w-full py-3 px-4 rounded-lg font-medium text-white bg-blue-600 hover:bg-blue-700 transition"
-                      onClick={() => signIn('','')}
-                    >
-                      Subscribe
-                    </button>
-                  )}
+                  <button
+                    className={`w-full py-3 rounded-lg font-medium text-white transition-colors font-logo ${
+                      isCurrentPlan ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-700 hover:bg-blue-800'
+                    }`}
+                    onClick={() => (isFreePlan || isCurrentPlan ? handleGetStarted() : handleSubscribe(plan))}
+                    disabled={isCurrentPlan}
+                  >
+                    {isCurrentPlan ? 'Current Plan' : isFreePlan ? 'Select Free' : `Subscribe`}
+                  </button>
                 </div>
               </div>
-            )
+            );
           })}
         </div>
       </div>
     </section>
-  )
+  );
 }

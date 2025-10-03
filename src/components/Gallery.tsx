@@ -1,16 +1,16 @@
 import { ArrowRight} from 'lucide-react';
-
 import video2 from '../pages/ai-scenario-changer.mp4';
 import video3 from '../pages/exterior_renovator.mp4';
 import video4 from '../pages/interior-remodel.mp4';
 import video6 from '../pages/texturelock-rendering.mp4';
 import video8 from '../pages/sketch.mp4';
-
+import video9 from '../pages/designn.mp4';
+import video10 from '../pages/2D.mp4';
 const Gallery = () => {
     const designs = [
         {
             title: "Interior Design",
-            videoUrl: video4,
+            videoUrl: video9,
             description: "Upload a sketch or model to redesign your interior space with magical styles"
         },
         {
@@ -60,7 +60,7 @@ const Gallery = () => {
         },
         {
             title: "2D Floor Plan to 3D Model",
-            videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-a-shot-of-the-city-of-madrid-2845-large.mp4",
+            videoUrl:video10,
             description: "Convert 2D floor plans into stunning 3D models with ease"
         },
         {
@@ -84,7 +84,7 @@ const Gallery = () => {
                         AI-Generated Designs
                     </h2>
                     <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                        See what our AI can create for different spaces and requirements.
+                        See what our AI can create for different spaces and requirements
                     </p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-10">
@@ -111,7 +111,7 @@ const Gallery = () => {
                                     {design.description}
                                 </p>
                                 <a
-                                    href="/dashboard"
+                                    href="/Dashboard"
                                     className="inline-flex items-center justify-center rounded-full bg-blue-600 px-6 py-3 text-sm font-medium text-white transition-colors duration-300 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                 >
                                     Try {design.title}
